@@ -1,0 +1,17 @@
+#!/bin/sh
+
+master_head=`git rev-parse refs/heads/master`
+
+while read old_revision new_revision refname; do
+    head_commit=`git log -n 200 "$new_revision" | grep "$master_head"`
+
+    if [ "$head_commit" = "" ] ; then
+        echo "[POLICY] ブランチを最新の状態にする必要があります。"
+        echo "sample:"
+        echo ""
+        echo "    git pull origin master"
+        echo ""
+
+        exit 1
+    fi
+done
