@@ -3,6 +3,11 @@
 master_head=`git rev-parse refs/heads/master`
 
 while read old_revision new_revision refname; do
+    # deleteの時はスキップ
+    if [ "$new_revision" = "0000000000000000000000000000000000000000" ] ; then
+        continue
+    fi
+
     head_commit=`git log --pretty=format:"%H" $new_revision | grep $master_head`
 
     if [ "$head_commit" = "" ] ; then
